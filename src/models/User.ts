@@ -4,6 +4,7 @@ export class User {
         private name: string,
         private email: string,
         private password: string,
+        private role: string,
         private createdAt: string
     ) {}
 
@@ -37,6 +38,14 @@ export class User {
 
     public setPassword(value: string): void {
         this.password = value
+    }
+
+    public getRole(): string {
+        return this.role
+    }
+
+    public setRole(value: string): void {
+        this.role = value
     }
 
     public getCreatedAt(): string {

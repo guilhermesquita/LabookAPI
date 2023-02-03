@@ -16,6 +16,7 @@ export class UserController {
                 userDB.name,
                 userDB.email,
                 userDB.password,
+                userDB.role,
                 userDB.created_at
             ))
 
@@ -35,109 +36,110 @@ export class UserController {
         }
     }
 
-    public createUser = async (req: Request, res: Response) => {
-        try {
-            const { id, name, email, password } = req.body
+    // public createUser = async (req: Request, res: Response) => {
+    //     try {
+    //         const { id, name, email, password, role } = req.body
 
-            if (typeof id !== "string") {
-                res.status(400)
-                throw new Error("'id' deve ser string")
-            }
+    //         if (typeof id !== "string") {
+    //             res.status(400)
+    //             throw new Error("'id' deve ser string")
+    //         }
 
-            if (typeof name !== "string") {
-                res.status(400)
-                throw new Error("'name' deve ser string")
-            }
+    //         if (typeof name !== "string") {
+    //             res.status(400)
+    //             throw new Error("'name' deve ser string")
+    //         }
 
-            if (typeof email !== "string") {
-                res.status(400)
-                throw new Error("'email' deve ser string")
-            }
+    //         if (typeof email !== "string") {
+    //             res.status(400)
+    //             throw new Error("'email' deve ser string")
+    //         }
 
-            if (typeof password !== "string") {
-                res.status(400)
-                throw new Error("'password' deve ser string")
-            }
+    //         if (typeof password !== "string") {
+    //             res.status(400)
+    //             throw new Error("'password' deve ser string")
+    //         }
 
-            const userDatabase = new UserDatabase()
-            const userDBExists = await userDatabase.findUserById(id)
+    //         const userDatabase = new UserDatabase()
+    //         const userDBExists = await userDatabase.findUserById(id)
 
-            if (userDBExists) {
-                res.status(400)
-                throw new Error("'id' já existe")
-            }
+    //         if (userDBExists) {
+    //             res.status(400)
+    //             throw new Error("'id' já existe")
+    //         }
 
-            const newUser = new User(
-                id,
-                name,
-                email,
-                password,
-                new Date().toISOString()
-            ) // yyyy-mm-ddThh:mm:sssZ
+    //         const newUser = new User(
+    //             id,
+    //             name,
+    //             email,
+    //             password,
+    //             role,
+    //             new Date().toISOString()
+    //         ) // yyyy-mm-ddThh:mm:sssZ
 
-            const newUserDB: UserDB = {
-                id: newUser.getId(),
-                name: newUser.getName(),
-                email: newUser.getEmail(),
-                password: newUser.getPassword(),
-                created_at: newUser.getCreatedAt()
-            }
+    //         const newUserDB: UserDB = {
+    //             id: newUser.getId(),
+    //             name: newUser.getName(),
+    //             email: newUser.getEmail(),
+    //             password: newUser.getPassword(),
+    //             created_at: newUser.getCreatedAt()
+    //         }
 
-            await userDatabase.insertUser(newUserDB)
+    //         await userDatabase.insertUser(newUserDB)
 
-            res.status(201).send(newUser)
-        } catch (error) {
-            console.log(error)
+    //         res.status(201).send(newUser)
+    //     } catch (error) {
+    //         console.log(error)
 
-            if (req.statusCode === 200) {
-                res.status(500)
-            }
+    //         if (req.statusCode === 200) {
+    //             res.status(500)
+    //         }
 
-            if (error instanceof Error) {
-                res.send(error.message)
-            } else {
-                res.send("Erro inesperado")
-            }
-        }
-    }
+    //         if (error instanceof Error) {
+    //             res.send(error.message)
+    //         } else {
+    //             res.send("Erro inesperado")
+    //         }
+    //     }
+    // }
 
-    public editUser = async (req: Request, res: Response) => {
-        try {
-            const id = req.params.id
+    // public editUser = async (req: Request, res: Response) => {
+    //     try {
+    //         const id = req.params.id
 
-            const { newId, newName, newEmail, newPassword } = req.body
+    //         const { newId, newName, newEmail, newPassword } = req.body
 
-            const newUser = new UserDatabase()
+    //         const newUser = new UserDatabase()
 
-            const existUser = await newUser.findUserById(id)
+    //         const existUser = await newUser.findUserById(id)
 
-            if (!existUser) {
-                res.status(400)
-                throw new Error("Usuário não encontrado!")
-            }
+    //         if (!existUser) {
+    //             res.status(400)
+    //             throw new Error("Usuário não encontrado!")
+    //         }
 
-            const update:UserDB = {
-                id: newId,
-                name: newName,
-                email: newEmail,
-                password: newPassword,
-                created_at: new Date().toISOString()
-            }
+    //         const update:UserDB = {
+    //             id: newId,
+    //             name: newName,
+    //             email: newEmail,
+    //             password: newPassword,
+    //             created_at: new Date().toISOString()
+    //         }
 
-            await newUser.editUser(update, id)
+    //         await newUser.editUser(update, id)
 
-        } catch (error) {
-            console.log(error)
+    //     } catch (error) {
+    //         console.log(error)
 
-            if (req.statusCode === 200) {
-                res.status(500)
-            }
+    //         if (req.statusCode === 200) {
+    //             res.status(500)
+    //         }
 
-            if (error instanceof Error) {
-                res.send(error.message)
-            } else {
-                res.send("Erro inesperado")
-            }
-        }
-    }
+    //         if (error instanceof Error) {
+    //             res.send(error.message)
+    //         } else {
+    //             res.send("Erro inesperado")
+    //         }
+    //     }
+    // }
 }

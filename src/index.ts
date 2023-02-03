@@ -18,9 +18,9 @@ const userController = new UserController()
 
 app.get("/users", userController.getUsers);
 
-app.post("/users", userController.createUser);
+// app.post("/users", userController.createUser);
 
-app.put("/users/:id", userController.editUser);
+// app.put("/users/:id", userController.editUser);
 
 app.get("/accounts", async (req: Request, res: Response) => {
     try {
