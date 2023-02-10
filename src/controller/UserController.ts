@@ -1,24 +1,14 @@
 import { Request, Response } from "express"
-import { UserDatabase } from "../database/UserDatabase"
-import { User } from "../models/User"
-import { UserDB } from "../types"
+import { UserBusiness } from "../business/UserBusiness"
 
 export class UserController {
     public getUsers = async (req: Request, res: Response) => {
         try {
             const q = req.query.q as string | undefined
 
-            const userDatabase = new UserDatabase()
-            const usersDB = await userDatabase.findUsers(q)
 
-            const users: User[] = usersDB.map((userDB) => new User(
-                userDB.id,
-                userDB.name,
-                userDB.email,
-                userDB.password,
-                userDB.role,
-                userDB.created_at
-            ))
+            const userDb = new UserBusiness()
+            const users = await userDb.getUser(q)
 
             res.status(200).send(users)
         } catch (error) {
