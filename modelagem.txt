@@ -1,0 +1,30 @@
+NEGÓCIOS:
+
+ USERS{
+    id: string,
+    name: string,
+    email: string,
+    password: string,
+    role: string,
+    created_at: string
+}
+
+ POSTS{
+    id: string,
+    creator_id: string,
+    content: string,
+    likes: number,
+    dislikes: number,
+    created_at: string,
+    updated_at: string
+ }
+
+ LIKES_DISLIKES{
+    user_id: string,
+    post_id: string,
+    like: number
+ }
+
+ DATABASE:
+    Every USER have (a/many) POST(s) - oneToMany
+    Every POST have (a/many) LIKES_DISLIKES - oneToMany
