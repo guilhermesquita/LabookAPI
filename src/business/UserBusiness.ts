@@ -1,5 +1,6 @@
 import { UserDatabase } from "../database/UserDatabase"
 import { User } from "../models/User"
+import { UserDB } from "../types"
 
 export class UserBusiness {
     public getUser = async (q:string|undefined) => {
@@ -25,5 +26,28 @@ export class UserBusiness {
         ))
 
         return users
+    }
+
+    public createUser = async(user: UserDB) => {
+        
+        // if(typeof user.name === 'string'){
+        //     throw newError
+        // }
+
+
+        // const user = 
+
+        // const body: User = {
+        //     id: user.id,
+        //     name: user.name,
+        //     email: user.email,
+        //     password: user.password,
+        //     role: user.role,
+        //     createdAt: user.created_at
+        // }
+
+        // const userDatabase = new UserDatabase
+        // const userDB = await userDatabase.insertUser(body)
+
     }
 }
