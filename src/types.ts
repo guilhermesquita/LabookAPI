@@ -7,23 +7,33 @@ export interface UserDB {
     created_at: string
 }
 
-// tipagem para criação (POST) sem created_at
-export interface UserDBPost {
+export interface PostDB {
     id: string,
-    name: string,
-    email: string,
-    password: string
+    creator_id: string,
+    content: string,
+    likes: number,
+    dislikes: number,
+    created_at: string,
+    updated_at: string
 }
 
-export interface AccountDB {
-    id: string,
-    balance: number,
-    owner_id: string,
-    created_at: string
-}
+// // tipagem para criação (POST) sem created_at
+// export interface UserDBPost {
+//     id: string,
+//     name: string,
+//     email: string,
+//     password: string
+// }
 
-// tipagem para criação (POST) sem balance e created_at
-export interface AccountDBPost {
-    id: string,
-    owner_id: string
-}
+// export interface AccountDB {
+//     id: string,
+//     balance: number,
+//     owner_id: string,
+//     created_at: string
+// }
+
+// // tipagem para criação (POST) sem balance e created_at
+// export interface AccountDBPost {
+//     id: string,
+//     owner_id: string
+// }
