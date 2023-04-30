@@ -2,8 +2,8 @@ import { PostDatabase } from "../database/PostDatabase"
 
 export class PostBussiness {
     public getPost = async () => {
-        const postDB = new PostDatabase()
-        const posts = postDB.findPost()
+        const postsDB = new PostDatabase()
+        const posts = await postsDB.findPost()
 
         return posts
     }

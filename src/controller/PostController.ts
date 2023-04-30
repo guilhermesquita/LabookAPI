@@ -5,7 +5,7 @@ export class PostController {
     public getPosts = async(req: Request, res: Response) => {
         try {
             const postDb = new PostBussiness()
-            const posts = postDb.getPost()
+            const posts = await postDb.getPost()
 
             res.send(posts)
         } catch (error) {
