@@ -1,10 +1,21 @@
 import { PostDatabase } from "../database/PostDatabase"
+import { Post } from "../models/Post"
 
 export class PostBussiness {
     public getPost = async () => {
-        const postsDB = new PostDatabase()
-        const posts = await postsDB.findPost()
+        const postsDatabase = new PostDatabase()
+        const postsDB = await postsDatabase.findPost()
 
-        return posts
+        const post: Post[] = postsDB.map((postDB)=> new Post(
+            postDB.id,
+            postDB.creator_id,
+            postDB.content,
+            postDB.likes,
+            postDB.dislikes,
+            postDB.updated_at,
+            postDB.created_at
+        ))
+
+        return post
     }
 }

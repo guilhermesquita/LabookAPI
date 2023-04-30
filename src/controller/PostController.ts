@@ -7,9 +7,13 @@ export class PostController {
             const postDb = new PostBussiness()
             const posts = await postDb.getPost()
 
-            res.send(posts)
+            res.status(200).send(posts)
         } catch (error) {
-            throw new Error('Error')
+            console.log(error)
+
+            if(req.statusCode === 200 ){
+                res.status(500)
+            }
         }
     }
 }
