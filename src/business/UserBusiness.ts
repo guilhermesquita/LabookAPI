@@ -1,6 +1,8 @@
 import { UserDatabase } from "../database/UserDatabase"
+import { BadRequestError } from "../errors/BadRequestError"
 import { User } from "../models/User"
 import { UserDB } from "../types"
+import { IUserInputDTO } from "./dtos/UserDTO"
 
 export class UserBusiness {
     public getUser = async (q:string|undefined) => {
@@ -28,26 +30,44 @@ export class UserBusiness {
         return users
     }
 
-    public createUser = async(user: UserDB) => {
+    public createUser = async(input: IUserInputDTO) => {
         
-        // if(typeof user.name === 'string'){
-        //     throw newError
-        // }
+        const { id, name, email, password, role } = input
 
+        const userData = new UserDatabase()
+        const userDBexists = await userData.findUsers(id)
 
-        // const user = 
+        if(userDBexists.length > 0){
+            throw new BadRequestError("usuário existente!")
+        }
 
-        // const body: User = {
-        //     id: user.id,
-        //     name: user.name,
-        //     email: user.email,
-        //     password: user.password,
-        //     role: user.role,
-        //     createdAt: user.created_at
-        // }
+        const newUser = new User(
+            id,
+            name,
+            email,
+            password,
+            role,
+            new Date().toISOString()
+        ) 
 
-        // const userDatabase = new UserDatabase
-        // const userDB = await userDatabase.insertUser(body)
+        const newUserDB : UserDB = {
+            id: newUser.getId(),
+            name: newUser.getName(),
+            password: newUser.getPassword(),
+            email: newUser.getEmail(),
+            role: newUser.getRole(),
+            created_at: newUser.getCreatedAt()
+        }
+
+        const userDatabase = new UserDatabase
+        await userDatabase.insertUser(newUserDB)
+
+        const output = {
+            message: "Produto registrado com sucesso",
+            product: newUser
+        }
+        
+        return output
 
     }
 }

@@ -39,3 +39,6 @@ DROP TABLE posts; --NÃO USAR!!!!!!
 SELECT * FROM posts
 INNER JOIN users
 ON posts.creator_id = users.id;
+
+DELETE FROM users
+WHERE id = "u003";
