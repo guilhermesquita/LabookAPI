@@ -2,6 +2,7 @@ import { Request, Response } from "express"
 import { UserBusiness } from "../business/UserBusiness"
 import { BaseError } from "../errors/BaseError"
 
+
 export class UserController {
     public getUsers = async (req: Request, res: Response) => {
         try {
@@ -23,72 +24,53 @@ export class UserController {
         }
     }
 
-    // public createUser = async (req: Request, res: Response) => {
-    //     try {
-    //         const { id, name, email, password, role } = req.body
+    public createUser = async (req: Request, res: Response) => {
+        try {
+            const input = {
+                id: req.body.id,
+                name: req.body.name,
+                email: req.body.email,
+                password: req.body.password,
+                role: req.body.role,    
+            }
 
-    //         if (typeof id !== "string") {
-    //             res.status(400)
-    //             throw new Error("'id' deve ser string")
-    //         }
+            // if (typeof id !== "string") {
+            //     res.status(400)
+            //     throw new Error("'id' deve ser string")
+            // }
 
-    //         if (typeof name !== "string") {
-    //             res.status(400)
-    //             throw new Error("'name' deve ser string")
-    //         }
+            // if (typeof name !== "string") {
+            //     res.status(400)
+            //     throw new Error("'name' deve ser string")
+            // }
 
-    //         if (typeof email !== "string") {
-    //             res.status(400)
-    //             throw new Error("'email' deve ser string")
-    //         }
+            // if (typeof email !== "string") {
+            //     res.status(400)
+            //     throw new Error("'email' deve ser string")
+            // }
 
-    //         if (typeof password !== "string") {
-    //             res.status(400)
-    //             throw new Error("'password' deve ser string")
-    //         }
+            // if (typeof password !== "string") {
+            //     res.status(400)
+            //     throw new Error("'password' deve ser string")
+            // }
 
-    //         const userDatabase = new UserDatabase()
-    //         const userDBExists = await userDatabase.findUserById(id)
+            const userBusiness = new UserBusiness()
+            const output = await userBusiness.createUser(input)
 
-    //         if (userDBExists) {
-    //             res.status(400)
-    //             throw new Error("'id' já existe")
-    //         }
+        } catch (error) {
+            console.log(error)
 
-    //         const newUser = new User(
-    //             id,
-    //             name,
-    //             email,
-    //             password,
-    //             role,
-    //             new Date().toISOString()
-    //         ) // yyyy-mm-ddThh:mm:sssZ
+            if (req.statusCode === 200) {
+                res.status(500)
+            }
 
-    //         const newUserDB: UserDB = {
-    //             id: newUser.getId(),
-    //             name: newUser.getName(),
-    //             email: newUser.getEmail(),
-    //             password: newUser.getPassword(),
-    //             created_at: newUser.getCreatedAt()
-    //         }
-
-    //         await userDatabase.insertUser(newUserDB)
-
-    //         res.status(201).send(newUser)
-    //     } catch (error) {
-    //         console.log(error)
-
-    //         if (req.statusCode === 200) {
-    //             res.status(500)
-    //         }
-
-    //         if (error instanceof Error) {
-    //             res.send(error.message)
-    //         } else {
-    //             res.send("Erro inesperado")
-    //         }
-    //     }
-    // }
+            if (error instanceof Error) {
+                res.send(error.message)
+            } else {
+                res.send("Erro inesperado")
+            }
+        }
+    }
 
     // public editUser = async (req: Request, res: Response) => {
     //     try {
