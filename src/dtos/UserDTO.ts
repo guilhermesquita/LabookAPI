@@ -5,3 +5,11 @@ export interface IUserInputDTO{
     password: string,
     role: string
 }
+
+export interface IUserOutputDTO{
+    message: string,
+    user: {
+        id: string,
+        name: string
+    }
+}

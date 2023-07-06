@@ -8,4 +8,4 @@ const userDatabase = new UserDatabase()
 const userController = new UserController(new UserBusiness(userDatabase))
 
 useRouter.get('/', userController.getUsers)
-useRouter.post('/', userController.createUser)
+useRouter.post('/signup', userController.createUser)
