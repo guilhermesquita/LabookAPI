@@ -25,17 +25,27 @@ export class PostController {
         try {
         
         const input = {
-            id: req.params.id,
-            creator_id: req.params.creator_id,
-            content: req.params.content
+            id: req.body.id,
+            creator_id: req.body.creator_id,
+            content: req.body.content
         }
 
-        const posts = await this.postBusiness.createPost(input)
+        const output = await this.postBusiness.createPost(input)
 
-        return posts
+        res.send(output);
 
         } catch (error) {
-            
+            console.log(error)
+
+            if (req.statusCode === 200) {
+                res.status(500)
+            }
+
+            if (error instanceof Error) {
+                res.send(error.message)
+            } else {
+                res.send("Erro inesperado")
+            }
         }
     }
 }

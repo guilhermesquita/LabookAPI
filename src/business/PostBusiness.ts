@@ -4,6 +4,7 @@ import { IPostInputDTO } from "../dtos/PostDTO"
 import { IPost } from "../entity/post"
 import { BadRequestError } from "../errors/BadRequestError"
 import { Post } from "../models/Post"
+import { User } from "../models/User"
 
 export class PostBusiness {
 
@@ -39,8 +40,6 @@ export class PostBusiness {
                 creatorPost(postDB.creator_id)
             )
 
-            console.log(post.getCreator())
-
             const resultPost = {
                 id: post.getId(),
                 content: post.getContent(),
@@ -58,61 +57,52 @@ export class PostBusiness {
     }
 
     public createPost = async (input: IPostInputDTO) => {
-        try {
-            const { id, creator_id, content } = input
+        const { id, creator_id, content } = input
 
-            const postDbExists = await this.postDatabase.findPostById(id)
-            const userDb = await this.userDatabase.getUsers()
+        const postDBexists = await this.postDatabase.findPostById(id)
+        const usersDb = await this.userDatabase.getUsers()
 
-            if (postDbExists) {
-                throw new BadRequestError("usuário existente!")
-            }
-
-            const posts = userDb.map(async (userDB) => {
-                const newPost = new Post(
-                    id,
-                    content,
-                    undefined,
-                    undefined,
-                    new Date().toISOString(),
-                    new Date().toISOString(),
-                    { id: creator_id, name: userDB.name }
-                )
-
-                const newPostDB: IPost = {
-                    id: newPost.getId(),
-                    content: newPost.getContent(),
-                    likes: newPost.getLikes(),
-                    dislikes: newPost.getDislikes(),
-                    created_at: newPost.getCreatedAt(),
-                    updated_at: newPost.getUpdateAt(),
-                    creator_id: newPost.getCreator().id,
-                }
-
-                await this.postDatabase.insertPost(newPostDB);
-
-                const output = {
-                    message: 'Created',
-                    content: newPost.getId()
-                }
-
-                return output
+        function findNameCreator(creator_id: string){
+            const user = usersDb.find((userDb)=>{
+                return userDb === creator_id
             })
 
-            return posts
+            return user
+        }
 
-            // const newPost = new Post(
-            //     id,
-            //     content,
-            //     undefined,
-            //     undefined,
-            //     new Date().toISOString(),
-            //     new Date().toISOString(),
-            //     {id: creator_id, name: 'cds'}
-            // )
 
-        } catch (error) {
+        if (postDBexists) {
+            throw new BadRequestError("postagem existente!")
+        }
 
+        const newPost = new Post(
+            id,
+            content,
+            undefined,
+            undefined,
+            new Date().toISOString(),
+            new Date().toISOString(),
+            {
+                id: creator_id,
+                name: findNameCreator(creator_id)
+            }
+        )
+
+        const newPostDB: IPost = {
+            id: newPost.getId(),
+            content: newPost.getContent(),
+            created_at: newPost.getCreatedAt(),
+            creator_id: newPost.getCreator().id,
+            likes: newPost.getLikes(),
+            dislikes: newPost.getDislikes(),
+            updated_at: newPost.getUpdateAt()
+        }
+
+        await this.postDatabase.insertPost(newPostDB)
+
+        return {
+            message: 'Post has created',
+            id_post: newPost.getId()
         }
     }
 }
