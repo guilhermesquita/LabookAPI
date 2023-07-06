@@ -37,7 +37,7 @@ export class UserBusiness {
         const userData = new UserDatabase()
         const userDBexists = await userData.findUsers(id)
 
-        if(userDBexists.length > 0){
+        if(userDBexists.length){
             throw new BadRequestError("usuário existente!")
         }
 
