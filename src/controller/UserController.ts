@@ -57,6 +57,8 @@ export class UserController {
             const userBusiness = new UserBusiness()
             const output = await userBusiness.createUser(input)
 
+            res.send(output)
+
         } catch (error) {
             console.log(error)
 
