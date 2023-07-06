@@ -1,13 +1,18 @@
+import { Creator } from "../entity/creator"
+
 export class Post {
     constructor(
         private id: string,
-        private creatorId: string,
         private content: string,
         private likes: number,
         private dislikes: number,
         private createdAt: string,
-        private updatedAt: string
-    ) { }
+        private updatedAt: string,
+        private creator: {
+            id: string,
+            name: string
+        }
+    ) {}
 
     public getId(): string {
         return this.id
@@ -15,10 +20,6 @@ export class Post {
 
     public setId(newId: string): void {
         this.id = newId
-    }
-
-    public getCreatorId(): string {
-        return this.creatorId
     }
 
     public getContent(): string {
@@ -59,5 +60,13 @@ export class Post {
 
     public setUpdateAt(NewUpdatedAt: string): void {
         this.updatedAt = NewUpdatedAt
+    }
+
+    public getCreator(): Creator {
+        return this.creator
+    }
+    
+    public setCreator(NewCreator: Creator): void {
+        this.creator = NewCreator
     }
 }
