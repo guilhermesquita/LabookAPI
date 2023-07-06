@@ -1,18 +1,22 @@
 import { Request, Response } from "express";
-import { PostBussiness } from "../business/PostBusiness";
+import { PostBusiness } from "../business/PostBusiness";
 
 export class PostController {
+
+    constructor(
+        private postBusiness: PostBusiness
+    ){}
+
     public getPosts = async(req: Request, res: Response) => {
         try {
-            const postDb = new PostBussiness()
-            const posts = await postDb.getPost()
+            const posts = await this.postBusiness.getPost()
 
             res.status(200).send(posts)
         } catch (error) {
-            console.log(error)
-
-            if(req.statusCode === 200 ){
-                res.status(500)
+            if (error instanceof Error) {
+                res.status(500).send(error.message)
+            } else {
+                res.status(500).send('unexpected error')
             }
         }
     }

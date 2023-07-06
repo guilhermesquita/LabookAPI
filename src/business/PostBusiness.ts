@@ -1,21 +1,52 @@
 import { PostDatabase } from "../database/PostDatabase"
+import { UserDatabase } from "../database/UserDatabase"
 import { Post } from "../models/Post"
 
-export class PostBussiness {
+export class PostBusiness {
+
+    constructor(
+        private postDatabase: PostDatabase,
+        private userDatabase: UserDatabase
+    ) { }
+
     public getPost = async () => {
-        const postsDatabase = new PostDatabase()
-        const postsDB = await postsDatabase.findPost()
+        const postsDB = await this.postDatabase.findPost()
+        const usersDB = await this.userDatabase.getUsers()
 
-        const post: Post[] = postsDB.map((postDB)=> new Post(
-            postDB.id,
-            postDB.creator_id,
-            postDB.content,
-            postDB.likes,
-            postDB.dislikes,
-            postDB.updated_at,
-            postDB.created_at
-        ))
+        const creatorPost = (creatorId: string) => {
+            const creator = usersDB.find((user) => {
+                return creatorId === user.id
+            })
 
-        return post
+            return {
+                id: creatorId,
+                name: creator.name
+            }
+        }
+
+        const output = postsDB.map((postDB) => {
+
+            const post = new Post(postDB.id,
+                postDB.content,
+                postDB.likes,
+                postDB.dislikes,
+                postDB.created_at,
+                postDB.updated_at,
+                creatorPost(postDB.creator_id)
+            )
+
+            return{
+                id: post.getId(),
+                content: post.getContent(),
+                likes: post.getLikes(),
+                dislikes: post.getDislikes(),
+                created_at: post.getCreatedAt(),
+                updated_at: post.getUpdateAt(),
+                creator: post.getCreator()
+            }
+
+        })
+
+        return output
     }
 }

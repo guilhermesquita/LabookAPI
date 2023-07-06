@@ -4,27 +4,27 @@ import { BaseDatabase } from "./BaseDatabase";
 export class UserDatabase extends BaseDatabase {
     public static TABLE_USERS = "users"
 
-    public async findUsers(q: string | undefined) {
+    public async findUsersByName(q: string | undefined) {
         let usersDB
+        
+        const result: UserDB[] = await BaseDatabase
+            .connection(UserDatabase.TABLE_USERS)
+            .where("name", "LIKE", `%${q}%`)
 
-        if (q) {
-            const result: UserDB[] = await BaseDatabase
-                .connection(UserDatabase.TABLE_USERS)
-                .where("name", "LIKE", `%${q}%`)
-
-            usersDB = result
-        } else {
-            const result: UserDB[] = await BaseDatabase
-                .connection(UserDatabase.TABLE_USERS)
-
-            usersDB = result
-        }
-
+        usersDB = result
+        
         return usersDB
     }
 
-    public async findUserById   (id: string) {
-        const [ userDB ]: UserDB[] | undefined[] = await BaseDatabase
+    public async getUsers(){
+        const result = await BaseDatabase
+        .connection(UserDatabase.TABLE_USERS).select()
+
+        return result
+    }
+
+    public async findUserById(id: string) {
+        const [userDB]: UserDB[] | undefined[] = await BaseDatabase
             .connection(UserDatabase.TABLE_USERS)
             .where({ id })
 
@@ -37,11 +37,11 @@ export class UserDatabase extends BaseDatabase {
             .insert(newUserDB)
     }
 
-    public async editUser(update: UserDB, id:string){
+    public async editUser(update: UserDB, id: string) {
 
         await BaseDatabase
-        .connection(UserDatabase.TABLE_USERS)
-        .update(update)
-        .where({id: id})
+            .connection(UserDatabase.TABLE_USERS)
+            .update(update)
+            .where({ id: id })
     }
 }

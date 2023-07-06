@@ -6,7 +6,7 @@ export class PostDatabase extends BaseDatabase{
 
     public async findPost() {
         const result: PostDB[] = await BaseDatabase
-        .connection(PostDatabase.TABLE_POSTS)
+        .connection(PostDatabase.TABLE_POSTS).select()
 
         return result
     }
