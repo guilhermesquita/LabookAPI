@@ -7,7 +7,7 @@ export class PostController {
         private postBusiness: PostBusiness
     ){}
 
-    public getPosts = async(req: Request, res: Response) => {
+    public getPosts = async(_req: Request, res: Response) => {
         try {
             const posts = await this.postBusiness.getPost()
 
@@ -18,6 +18,24 @@ export class PostController {
             } else {
                 res.status(500).send('unexpected error')
             }
+        }
+    }
+
+    public createPosts = async(req: Request, res: Response) => {
+        try {
+        
+        const input = {
+            id: req.params.id,
+            creator_id: req.params.creator_id,
+            content: req.params.content
+        }
+
+        const posts = await this.postBusiness.createPost(input)
+
+        return posts
+
+        } catch (error) {
+            
         }
     }
 }
