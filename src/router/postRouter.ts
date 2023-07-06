@@ -12,3 +12,4 @@ const userDatabase = new UserDatabase()
 const postController = new PostController(new PostBusiness(postDatabase, userDatabase))
 
 postRouter.get('/', postController.getPosts)
+postRouter.post('/', postController.createPosts)

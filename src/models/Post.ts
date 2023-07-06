@@ -4,8 +4,8 @@ export class Post {
     constructor(
         private id: string,
         private content: string,
-        private likes: number,
-        private dislikes: number,
+        private likes: number | undefined,
+        private dislikes: number | undefined,
         private createdAt: string,
         private updatedAt: string,
         private creator: {
@@ -30,7 +30,7 @@ export class Post {
         this.content = newContent
     }
 
-    public getLikes(): number {
+    public getLikes(): number|undefined {
         return this.likes
     }
 
@@ -38,7 +38,7 @@ export class Post {
         this.likes = newGetLikes
     }
 
-    public getDislikes(): number {
+    public getDislikes(): number | undefined{
         return this.dislikes
     }
 

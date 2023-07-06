@@ -1,5 +1,5 @@
 import { UserDatabase } from "../database/UserDatabase"
-import { IUserInputDTO } from "../dtos/UserDTO"
+import { IUserInputDTO, IUserOutputDTO } from "../dtos/UserDTO"
 import { IUser } from "../entity/user"
 import { BadRequestError } from "../errors/BadRequestError"
 import { User } from "../models/User"
@@ -69,8 +69,7 @@ export class UserBusiness {
 
         const { id, name, email, password, role } = input
 
-        const userData = new UserDatabase()
-        const userDBexists = await userData.findUserById(id)
+        const userDBexists = await this.userDatabase.findUserById(id)
 
         if (userDBexists) {
             throw new BadRequestError("usuário existente!")
@@ -94,12 +93,14 @@ export class UserBusiness {
             created_at: newUser.getCreatedAt()
         }
 
-        const userDatabase = new UserDatabase
-        await userDatabase.insertUser(newUserDB)
+        await this.userDatabase.insertUser(newUserDB)
 
-        const output = {
+        const output:IUserOutputDTO = {
             message: "Produto registrado com sucesso",
-            product: newUser
+            user: {
+                id: newUser.getId(),
+                name: newUser.getName()
+            }
         }
 
         return output
