@@ -4,13 +4,16 @@ import { BaseError } from "../errors/BaseError"
 
 
 export class UserController {
+
+    constructor(
+        private userBusiness: UserBusiness
+    ){}
+
     public getUsers = async (req: Request, res: Response) => {
         try {
             const q = req.query.q as string | undefined
 
-
-            const userDb = new UserBusiness()
-            const users = await userDb.getUser(q)
+            const users = await this.userBusiness.getUser(q)
 
             res.status(200).send(users)
         } catch (error) {
@@ -54,8 +57,7 @@ export class UserController {
             //     throw new Error("'password' deve ser string")
             // }
 
-            const userBusiness = new UserBusiness()
-            const output = await userBusiness.createUser(input)
+            const output = await this.userBusiness.createUser(input)
 
             res.send(output)
 

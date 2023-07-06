@@ -35,7 +35,7 @@ export class PostBusiness {
                 creatorPost(postDB.creator_id)
             )
 
-            return{
+            const resultPost = {
                 id: post.getId(),
                 content: post.getContent(),
                 likes: post.getLikes(),
@@ -45,6 +45,7 @@ export class PostBusiness {
                 creator: post.getCreator()
             }
 
+            return resultPost;
         })
 
         return output

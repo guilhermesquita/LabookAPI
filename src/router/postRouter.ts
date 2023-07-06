@@ -8,8 +8,7 @@ export const postRouter = express.Router()
 
 const postDatabase = new PostDatabase()
 const userDatabase = new UserDatabase()
-const postBusiness = new PostBusiness(postDatabase, userDatabase)
 
-const postController = new PostController(postBusiness)
+const postController = new PostController(new PostBusiness(postDatabase, userDatabase))
 
 postRouter.get('/', postController.getPosts)

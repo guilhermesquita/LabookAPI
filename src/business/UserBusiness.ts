@@ -1,73 +1,108 @@
-// import { UserDatabase } from "../database/UserDatabase"
-// import { BadRequestError } from "../errors/BadRequestError"
-// import { User } from "../models/User"
-// import { UserDB } from "../types"
-// import { IUserInputDTO } from "./dtos/UserDTO"
+import { UserDatabase } from "../database/UserDatabase"
+import { IUserInputDTO } from "../dtos/UserDTO"
+import { IUser } from "../entity/user"
+import { BadRequestError } from "../errors/BadRequestError"
+import { User } from "../models/User"
 
-// export class UserBusiness {
-//     public getUser = async (q:string|undefined) => {
-       
-//         if(typeof q !== "string" && typeof q !== "undefined"){
-//             throw new Error('NÃO ENCONTRADO!')
-//         }
+export class UserBusiness {
 
-//         const userDatabase = new UserDatabase()
-//         const usersDB = await userDatabase.findUsers(q)
+    constructor(
+        private userDatabase: UserDatabase
+    ) { }
 
-//         if(usersDB.length < 1){
-//             throw new Error('Usuário não encontrado!')
-//         }
+    public getUser = async (q: string | undefined) => {
 
-//         const users: User[] = usersDB.map((userDB) => new User(
-//             userDB.id,
-//             userDB.name,
-//             userDB.email,
-//             userDB.password,
-//             userDB.role,
-//             userDB.created_at
-//         ))
+        if (typeof q !== "string" && typeof q !== "undefined") {
+            throw new Error('NÃO ENCONTRADO!')
+        }
 
-//         return users
-//     }
+        if (q) {
+            const usersDB:IUser[] = await this.userDatabase.findUsersByName(q)
 
-//     public createUser = async(input: IUserInputDTO) => {
-        
-//         const { id, name, email, password, role } = input
+            const users = usersDB.map((userDB) => {
+                const user = new User(
+                    userDB.id,
+                    userDB.name,
+                    userDB.email,
+                    userDB.password,
+                    userDB.role,
+                    userDB.created_at
+                )
 
-//         const userData = new UserDatabase()
-//         const userDBexists = await userData.findUsers(id)
+                const output = {
+                    id: user.getId(),
+                    name: user.getName(),
+                    email: user.getEmail()
+                }
 
-//         if(userDBexists.length){
-//             throw new BadRequestError("usuário existente!")
-//         }
+                return output
+            })
 
-//         const newUser = new User(
-//             id,
-//             name,
-//             email,
-//             password,
-//             role,
-//             new Date().toISOString()
-//         ) 
+            return users
+        } else {
+            const usersDB:IUser[] = await this.userDatabase.getUsers()
 
-//         const newUserDB : UserDB = {
-//             id: newUser.getId(),
-//             name: newUser.getName(),
-//             password: newUser.getPassword(),
-//             email: newUser.getEmail(),
-//             role: newUser.getRole(),
-//             created_at: newUser.getCreatedAt()
-//         }
+            const users = usersDB.map((userDB) => {
+                const user = new User(
+                    userDB.id,
+                    userDB.name,
+                    userDB.email,
+                    userDB.password,
+                    userDB.role,
+                    userDB.created_at
+                )
+                
+                const output = {
+                    id: user.getId(),
+                    name: user.getName(),
+                    emai: user.getEmail()
+                }
 
-//         const userDatabase = new UserDatabase
-//         await userDatabase.insertUser(newUserDB)
+                return output
 
-//         const output = {
-//             message: "Produto registrado com sucesso",
-//             product: newUser
-//         }
-        
-//         return output
+            })
+            return users
+        }
+    }
 
-//     }
-// }
+    public createUser = async (input: IUserInputDTO) => {
+
+        const { id, name, email, password, role } = input
+
+        const userData = new UserDatabase()
+        const userDBexists = await userData.findUserById(id)
+
+        if (userDBexists) {
+            throw new BadRequestError("usuário existente!")
+        }
+
+        const newUser = new User(
+            id,
+            name,
+            email,
+            password,
+            role,
+            new Date().toISOString()
+        )
+
+        const newUserDB: IUser = {
+            id: newUser.getId(),
+            name: newUser.getName(),
+            password: newUser.getPassword(),
+            email: newUser.getEmail(),
+            role: newUser.getRole(),
+            created_at: newUser.getCreatedAt()
+        }
+
+        const userDatabase = new UserDatabase
+        await userDatabase.insertUser(newUserDB)
+
+        const output = {
+            message: "Produto registrado com sucesso",
+            product: newUser
+        }
+
+        return output
+
+    }
+}
