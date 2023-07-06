@@ -4,7 +4,6 @@ import { IPostInputDTO } from "../dtos/PostDTO"
 import { IPost } from "../entity/post"
 import { BadRequestError } from "../errors/BadRequestError"
 import { Post } from "../models/Post"
-import { User } from "../models/User"
 
 export class PostBusiness {
 
