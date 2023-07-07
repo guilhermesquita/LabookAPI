@@ -100,7 +100,7 @@ export class PostBusiness {
         await this.postDatabase.insertPost(newPostDB)
 
         return {
-            message: 'Post has created',
+            message: 'Postagem criada!',
             id_post: newPost.getId()
         }
     }
