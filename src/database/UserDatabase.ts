@@ -31,6 +31,13 @@ export class UserDatabase extends BaseDatabase {
         return userDB
     }
 
+    public async findUserByEmailandPassword(email: string, password: string) {
+        const [userDB]: IUser[] | undefined[] = await BaseDatabase
+            .connection(UserDatabase.TABLE_USERS).where({ email }).where({ password })
+
+        return userDB
+    }
+
     public async insertUser(newUserDB: IUser) {
         await BaseDatabase
             .connection(UserDatabase.TABLE_USERS)

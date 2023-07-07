@@ -75,6 +75,52 @@ export class UserController {
         }
     }
 
+    public loginUser = async (req: Request, res: Response) => {
+        try {
+            const input = {
+                email: req.body.email,
+                password: req.body.password,
+            }
+
+            // if (typeof id !== "string") {
+            //     res.status(400)
+            //     throw new Error("'id' deve ser string")
+            // }
+
+            // if (typeof name !== "string") {
+            //     res.status(400)
+            //     throw new Error("'name' deve ser string")
+            // }
+
+            // if (typeof email !== "string") {
+            //     res.status(400)
+            //     throw new Error("'email' deve ser string")
+            // }
+
+            // if (typeof password !== "string") {
+            //     res.status(400)
+            //     throw new Error("'password' deve ser string")
+            // }
+
+            const output = await this.userBusiness.loginUser(input)
+
+            res.send(output)
+
+        } catch (error) {
+            console.log(error)
+
+            if (req.statusCode === 200) {
+                res.status(500)
+            }
+
+            if (error instanceof Error) {
+                res.send(error.message)
+            } else {
+                res.send("Erro inesperado")
+            }
+        }
+    }
+
     // public editUser = async (req: Request, res: Response) => {
     //     try {
     //         const id = req.params.id
