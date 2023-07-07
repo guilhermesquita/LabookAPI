@@ -1,6 +1,6 @@
 import { PostDatabase } from "../database/PostDatabase"
 import { UserDatabase } from "../database/UserDatabase"
-import { IPostInputDTO } from "../dtos/PostDTO"
+import { IPostInputDTO, IPostInputEditDTO } from "../dtos/PostDTO"
 import { IPost } from "../entity/post"
 import { BadRequestError } from "../errors/BadRequestError"
 import { Post } from "../models/Post"
@@ -102,6 +102,21 @@ export class PostBusiness {
         return {
             message: 'Postagem criada!',
             id_post: newPost.getId()
+        }
+    }
+
+    public editPost = async (input:IPostInputEditDTO) => {
+
+        const postExists = await this.postDatabase.findPostById(input.id)
+        
+        if(!postExists) {
+            throw new BadRequestError('post not found')
+        }
+
+        await this.postDatabase.editPost(input)
+
+        return {
+            content: input.content
         }
     }
 }
