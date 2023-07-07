@@ -6,6 +6,11 @@ export interface IUserInputDTO{
     role: string
 }
 
+export interface IUserInputLoginDTO{
+    email: string,
+    password: string
+}
+
 export interface IUserOutputDTO{
     message: string,
     user: {

@@ -9,3 +9,4 @@ const userController = new UserController(new UserBusiness(userDatabase))
 
 useRouter.get('/', userController.getUsers)
 useRouter.post('/signup', userController.createUser)
+useRouter.post('/login', userController.loginUser)

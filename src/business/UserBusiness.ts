@@ -1,5 +1,5 @@
 import { UserDatabase } from "../database/UserDatabase"
-import { IUserInputDTO, IUserOutputDTO } from "../dtos/UserDTO"
+import { IUserInputDTO, IUserInputLoginDTO, IUserOutputDTO } from "../dtos/UserDTO"
 import { IUser } from "../entity/user"
 import { BadRequestError } from "../errors/BadRequestError"
 import { User } from "../models/User"
@@ -17,7 +17,7 @@ export class UserBusiness {
         }
 
         if (q) {
-            const usersDB:IUser[] = await this.userDatabase.findUsersByName(q)
+            const usersDB: IUser[] = await this.userDatabase.findUsersByName(q)
 
             const users = usersDB.map((userDB) => {
                 const user = new User(
@@ -40,7 +40,7 @@ export class UserBusiness {
 
             return users
         } else {
-            const usersDB:IUser[] = await this.userDatabase.getUsers()
+            const usersDB: IUser[] = await this.userDatabase.getUsers()
 
             const users = usersDB.map((userDB) => {
                 const user = new User(
@@ -51,7 +51,7 @@ export class UserBusiness {
                     userDB.role,
                     userDB.created_at
                 )
-                
+
                 const output = {
                     id: user.getId(),
                     name: user.getName(),
@@ -95,7 +95,7 @@ export class UserBusiness {
 
         await this.userDatabase.insertUser(newUserDB)
 
-        const output:IUserOutputDTO = {
+        const output: IUserOutputDTO = {
             message: "Produto registrado com sucesso",
             user: {
                 id: newUser.getId(),
@@ -106,4 +106,18 @@ export class UserBusiness {
         return output
 
     }
+
+    public loginUser = async (input: IUserInputLoginDTO) => {
+
+        const { email, password } = input
+
+        const userExists = await this.userDatabase.findUserByEmailandPassword(email, password)
+
+        if (!userExists) {
+            throw new BadRequestError('Email or Password not found')
+        }
+
+        return { message: 'User login successful' }
+    }
+
 }
