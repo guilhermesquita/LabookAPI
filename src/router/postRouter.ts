@@ -14,3 +14,4 @@ const postController = new PostController(new PostBusiness(postDatabase, userDat
 postRouter.get('/', postController.getPosts)
 postRouter.post('/', postController.createPosts)
 postRouter.put('/:id', postController.editPosts)
+postRouter.delete('/:id', postController.deletePost)

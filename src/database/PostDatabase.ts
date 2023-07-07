@@ -22,6 +22,11 @@ export class PostDatabase extends BaseDatabase{
         .connection(PostDatabase.TABLE_POSTS).update(updatePost).where({id: input.id})
     }
 
+    public async deletePost(id: string) {
+        await BaseDatabase
+        .connection(PostDatabase.TABLE_POSTS).del().where({id: id})
+    }
+
     public async findPostById(id: string) {
         const [postDB]: IPost[] | undefined[] = await BaseDatabase
             .connection(PostDatabase.TABLE_POSTS)
