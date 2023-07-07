@@ -3,3 +3,8 @@ export interface IPostInputDTO{
     creator_id: string,
     content: string
 }
+
+export interface IPostInputEditDTO{
+    id: string,
+    content: string
+}

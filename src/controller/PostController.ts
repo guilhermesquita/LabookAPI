@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { PostBusiness } from "../business/PostBusiness";
+import { IPostInputEditDTO } from "../dtos/PostDTO";
 
 export class PostController {
 
@@ -10,6 +11,26 @@ export class PostController {
     public getPosts = async(_req: Request, res: Response) => {
         try {
             const posts = await this.postBusiness.getPost()
+
+            res.status(200).send(posts)
+        } catch (error) {
+            if (error instanceof Error) {
+                res.status(500).send(error.message)
+            } else {
+                res.status(500).send('unexpected error')
+            }
+        }
+    }
+
+    public editPosts = async(req: Request, res: Response) => {
+        try {
+
+            const input:IPostInputEditDTO = {
+                id: req.params.id,
+                content: req.body.content
+            }
+
+            const posts = await this.postBusiness.editPost(input)
 
             res.status(200).send(posts)
         } catch (error) {

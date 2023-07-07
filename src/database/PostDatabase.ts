@@ -1,3 +1,4 @@
+import { IPostInputEditDTO } from "../dtos/PostDTO";
 import { IPost } from "../entity/post";
 import { BaseDatabase } from "./BaseDatabase";
 
@@ -9,6 +10,16 @@ export class PostDatabase extends BaseDatabase{
         .connection(PostDatabase.TABLE_POSTS).select()
 
         return result
+    }
+
+    public async editPost(input: IPostInputEditDTO) {
+
+        const updatePost = {
+            content: input.content
+        }
+
+        await BaseDatabase
+        .connection(PostDatabase.TABLE_POSTS).update(updatePost).where({id: input.id})
     }
 
     public async findPostById(id: string) {
