@@ -119,4 +119,17 @@ export class PostBusiness {
             content: input.content
         }
     }
+
+    public deletePost = async (id: string) => {
+
+        const postExists = await this.postDatabase.findPostById(id)
+        
+        if(!postExists) {
+            throw new BadRequestError('post not found')
+        }
+
+        await this.postDatabase.deletePost(id)
+
+        return 'post deleted successfully'
+    }
 }
